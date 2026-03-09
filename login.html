@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        a {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <p style="text-align: center; margin-top: 20px;">
+            Don't have an account? <a href="register.html">Sign up</a>
+        </p>
+    </div>
+
+    <script>
+        let configuration = {
+            token: null,
+            loggedIn: false
+        };
+
+        function getHost() {
+            return "https://ducks-service-m2gu.onrender.com";
+        }
+
+        async function login() {    
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let customer = {username: username, password: password}
+            let request = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(customer)
+            };
+            try {
+                let response = await fetch(getHost() + "/signin", request);
+                if(response.status == 200) {  
+                    alert("The login was successful!");
+                    const token = await response.text();
+                    configuration.token = token;
+                    configuration.loggedIn = true;
+                    location.href = "index.html";
+
+                } else {
+                    console.log(`response status:${response.status}`);            
+                    alert("Something went wrong!");
+                }
+            }
+            catch(error) {
+                console.log(error);        
+                alert("Something went wrong!");
+            }    
+        }
+    </script>
+    
+</body>
+</html>

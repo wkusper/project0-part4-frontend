@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+        }
+        h2 {
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        a {
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <input type="text" placeholder="Email" id="email" required>
+        <input type="text" placeholder="Username" id="username" required>
+        <input type="password" placeholder="Password" id="password" required>
+        <button onclick="signup()">Sign Up</button>
+        <p style="text-align: center; margin-top: 20px;">
+            Already have an account? <a href="login.html">Login</a>
+        </p>
+    </div>
+
+    <script>
+        let configuration = {
+            token: null,
+            loggedIn: false
+        };
+
+        function getHost() {
+            return "https://ducks-service-m2gu.onrender.com";
+        }
+
+        function cancel() {
+            location.href = "index.html";
+        }
+
+        async function signup() {
+            let email = document.getElementById("email").value;
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+            let customer = {email:email, username: username, password: password}
+            let request = {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(customer)
+            };
+            try {
+                let response = await fetch(getHost() + "/signup", request);
+                if(response.status == 200) {  
+                    alert("The registration was successful!")
+                    location.href = "login.html";
+
+                } else {
+                    console.log(`response status:${response.status}`);            
+                    alert("Something went wrong!");
+                }
+            }
+            catch(error) {
+                console.log(error);        
+                alert("Something went wrong!");
+            }    
+        }
+    </script>
+</body>
+</html>
